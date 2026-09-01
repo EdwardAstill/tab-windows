@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Tab Windows
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A shadcn/ui registry component for arranging draggable, tab-like windows in a
+bounded workspace. It uses Base UI for the accessible handle primitive and ships
+with accessible pointer and keyboard movement.
 
-Currently, two official plugins are available:
+## Install
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Initialize the consuming project with shadcn's Base UI preset if it is not
+already configured:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+bunx shadcn@latest init --base base
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Install the component directly from this GitHub registry:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+bunx shadcn@latest add EdwardAstill/tabs/tab-windows
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The installer adds the Base UI dependency and writes
+`components/ui/tab-windows.tsx`. No separate component stylesheet is required.
+
+## Use
+
+```tsx
+import { TabWindows } from "@/components/ui/tab-windows";
+
+export function Example() {
+  return (
+    <TabWindows.Root aria-label="Project workspace" className="h-[560px]">
+      <TabWindows.Item id="notes" defaultPosition={{ x: 24, y: 40 }}>
+        <TabWindows.Handle aria-label="Move Notes">Notes</TabWindows.Handle>
+        <TabWindows.Content>Your content goes here.</TabWindows.Content>
+      </TabWindows.Item>
+    </TabWindows.Root>
+  );
+}
+```
+
+Drag a handle with a pointer. When the handle is focused, use the arrow keys to
+move by 8 pixels or Shift + arrow keys to move by 32 pixels. Items remain inside
+the root workspace and the most recently pressed item moves to the front.
+
+`TabWindows.Item` also accepts `onPositionChange`, which receives `{ x, y }`
+after pointer or keyboard movement.
+
+## Develop
+
+```bash
+bun install
+bun run dev
+bun run test
+bun run registry:build
 ```

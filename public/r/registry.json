@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "tab-windows",
+  "homepage": "https://github.com/EdwardAstill/tabs",
+  "items": [
+    {
+      "name": "tab-windows",
+      "type": "registry:ui",
+      "title": "Tab Windows",
+      "description": "A bounded workspace for draggable windows with tab-like handles.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "src/components/ui/tab-windows.tsx",
+          "type": "registry:ui",
+          "target": "@ui/tab-windows.tsx"
+        }
+      ]
+    }
+  ]
+}
