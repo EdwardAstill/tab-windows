@@ -7,13 +7,23 @@
       "name": "tab-windows",
       "type": "registry:ui",
       "title": "Tab Windows",
-      "description": "A bounded workspace for draggable windows with tab-like handles.",
-      "dependencies": ["@base-ui/react"],
+      "description": "A tiled workspace with shadcn tabs and resizable panes.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
       "files": [
         {
           "path": "src/components/ui/tab-windows.tsx",
           "type": "registry:ui",
           "target": "@ui/tab-windows.tsx"
+        },
+        {
+          "path": "src/components/ui/tabs.tsx",
+          "type": "registry:ui",
+          "target": "@ui/tabs.tsx"
+        },
+        {
+          "path": "src/lib/tab-windows-layout.ts",
+          "type": "registry:lib",
+          "target": "@lib/tab-windows-layout.ts"
         }
       ]
     }

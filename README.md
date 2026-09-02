@@ -1,50 +1,51 @@
-# Tab Windows
+# Tiling Tabs
 
-A shadcn/ui registry component for arranging draggable, tab-like windows in a
-bounded workspace. It uses Base UI for the accessible handle primitive and ships
-with accessible pointer and keyboard movement.
+A small shadcn registry component for arranging draggable tabs in resizable,
+tiled panes. It uses the standard shadcn Base UI tabs and native browser drag
+and drop for docking.
 
 ## Install
 
-Initialize the consuming project with shadcn's Base UI preset if it is not
-already configured:
-
 ```bash
 bunx shadcn@latest init --base base
-```
-
-Install the component directly from this GitHub registry:
-
-```bash
 bunx shadcn@latest add EdwardAstill/tab-windows/tab-windows
 ```
 
-The installer adds the Base UI dependency and writes
-`components/ui/tab-windows.tsx`. No separate component stylesheet is required.
+The registry installs the tiling component, the shadcn Tabs elements, and its
+layout model.
 
 ## Use
 
 ```tsx
 import { TabWindows } from "@/components/ui/tab-windows";
+import type { TabWindowsLayout } from "@/lib/tab-windows-layout";
+
+type Tab = "files" | "preview";
+
+const layout: TabWindowsLayout<Tab> = {
+  type: "split",
+  direction: "horizontal",
+  children: [
+    { type: "pane", id: "files", tabs: ["files"], activeTab: "files" },
+    { type: "pane", id: "preview", tabs: ["preview"], activeTab: "preview" },
+  ],
+};
 
 export function Example() {
   return (
-    <TabWindows.Root aria-label="Project workspace" className="h-[560px]">
-      <TabWindows.Item id="notes" defaultPosition={{ x: 24, y: 40 }}>
-        <TabWindows.Handle aria-label="Move Notes">Notes</TabWindows.Handle>
-        <TabWindows.Content>Your content goes here.</TabWindows.Content>
-      </TabWindows.Item>
-    </TabWindows.Root>
+    <TabWindows
+      aria-label="Project workspace"
+      className="h-[560px]"
+      defaultLayout={layout}
+      renderPanel={(tab) => <div className="p-6">{tab}</div>}
+    />
   );
 }
 ```
 
-Drag a handle with a pointer. When the handle is focused, use the arrow keys to
-move by 8 pixels or Shift + arrow keys to move by 32 pixels. Items remain inside
-the root workspace and the most recently pressed item moves to the front.
-
-`TabWindows.Item` also accepts `onPositionChange`, which receives `{ x, y }`
-after pointer or keyboard movement.
+Drag a tab onto the center of a pane to group it there, or onto an edge to
+create a new tile. Drag the dividers—or focus one and use the arrow keys—to
+resize adjacent panes.
 
 ## Develop
 
