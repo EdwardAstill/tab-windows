@@ -16,7 +16,7 @@ bunx shadcn@latest init --base base
 Install the component directly from this GitHub registry:
 
 ```bash
-bunx shadcn@latest add EdwardAstill/tabs/tab-windows
+bunx shadcn@latest add EdwardAstill/tab-windows/tab-windows
 ```
 
 The installer adds the Base UI dependency and writes

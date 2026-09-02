@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "tab-windows",
-  "homepage": "https://github.com/EdwardAstill/tabs",
+  "homepage": "https://github.com/EdwardAstill/tab-windows",
   "items": [
     {
       "name": "tab-windows",
