@@ -2,6 +2,7 @@ import { createEvent, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, mock } from "bun:test";
 
 import { TabWindows } from "../src/components/ui/tab-windows";
+import { PanelsWorkspace } from "../src/features/panels/PanelsWorkspace";
 import type { TabWindowsLayout } from "../src/lib/tab-windows-layout";
 
 type Tab = "research" | "draft" | "tasks";
@@ -33,6 +34,23 @@ const labels: Record<Tab, string> = {
   draft: "Draft",
   tasks: "Tasks",
 };
+
+it("renders the demo with only the shadcn Card defaults", () => {
+  const { container } = render(<PanelsWorkspace />);
+  const main = container.querySelector("main")!;
+  const card = container.querySelector('[data-slot="card"]')!;
+  const workspace = container.querySelector("[data-demo-workspace]")!;
+
+  expect(main).not.toHaveAttribute("class");
+  expect(card).toHaveClass("rounded-xl", "bg-card", "ring-1");
+  expect(card.className).not.toMatch(/h-\[|w-\[|max-w-/);
+  expect(workspace).toHaveClass("px-(--card-spacing)");
+  expect(workspace.className).toBe("px-(--card-spacing)");
+  expect(workspace).toContainElement(
+    screen.getByRole("region", { name: "Tiling tabs demo" }),
+  );
+  expect(screen.getAllByRole("tab")).toHaveLength(3);
+});
 
 it("renders a tiled workspace and only the active tab in each pane", () => {
   render(
@@ -77,6 +95,23 @@ it("leaves the tiling pane shell visually unstyled", () => {
   const visualUtilities = /(^|\s)(border|rounded|bg-|text-|shadow|p[trblxy]?-)\S*/;
 
   expect(pane.className).not.toMatch(visualUtilities);
+});
+
+it("uses the shadcn tab defaults without component overrides", () => {
+  const { container } = render(
+    <TabWindows
+      defaultLayout={makeLayout()}
+      renderPanel={(tab) => <p>{tab} panel</p>}
+    />,
+  );
+  const tabList = screen.getAllByRole("tablist")[0];
+  const tab = screen.getByRole("tab", { name: "research" });
+  const panel = container.querySelector('[data-slot="tab-windows-panel"]')!;
+
+  expect(tabList).toHaveClass("inline-flex");
+  expect(tabList).not.toHaveClass("shrink-0");
+  expect(tab).not.toHaveClass("cursor-grab", "select-none");
+  expect(panel).not.toHaveClass("min-h-0", "overflow-auto");
 });
 
 it("exposes slots so consumers can style the unstyled parts", () => {
@@ -126,9 +161,15 @@ it("previews and applies an edge drop", () => {
   });
   fireEvent(pane, dragOver);
   expect(pane).toHaveAttribute("data-drop-edge", "right");
-  expect(
-    container.querySelector('[data-slot="tab-windows-drop-indicator"]'),
-  ).toHaveAttribute("data-drop-edge", "right");
+  const indicator = container.querySelector(
+    '[data-slot="tab-windows-drop-indicator"]',
+  );
+  expect(indicator).toHaveAttribute("data-drop-edge", "right");
+  expect(indicator).toHaveClass(
+    "border-2",
+    "border-primary/50",
+    "bg-primary/10",
+  );
   fireEvent.drop(pane, { clientX: 395, clientY: 150, dataTransfer: transfer });
 
   const next = onLayoutChange.mock.calls.at(-1)?.[0] as TabWindowsLayout<Tab>;

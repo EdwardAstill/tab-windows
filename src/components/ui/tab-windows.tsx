@@ -160,7 +160,7 @@ export function TabWindows<TTab extends string = string>({
                 aria-valuemax={100}
                 aria-valuenow={Math.round((sizes[index] ?? 0) * 100)}
                 className={cn(
-                  "z-10 shrink-0 outline-none",
+                  "z-10 shrink-0",
                   node.direction === "horizontal"
                     ? "w-1 cursor-col-resize"
                     : "h-1 cursor-row-resize",
@@ -201,7 +201,6 @@ export function TabWindows<TTab extends string = string>({
         onDrop={(event) => applyDrop(event, pane.id)}
       >
         <Tabs
-          className="flex size-full min-h-0 flex-col"
           value={pane.activeTab}
           onValueChange={(value) => {
             if (typeof value !== "string") return;
@@ -210,13 +209,9 @@ export function TabWindows<TTab extends string = string>({
             );
           }}
         >
-          <TabsList
-            aria-label={`${pane.id} tabs`}
-            className="flex shrink-0"
-          >
+          <TabsList aria-label={`${pane.id} tabs`}>
             {pane.tabs.map((tab) => (
               <TabsTrigger
-                className="cursor-grab select-none"
                 data-slot="tab-windows-tab"
                 draggable
                 key={tab}
@@ -229,7 +224,6 @@ export function TabWindows<TTab extends string = string>({
             ))}
           </TabsList>
           <TabsContent
-            className="min-h-0 flex-1 overflow-auto outline-none"
             data-slot="tab-windows-panel"
             value={pane.activeTab}
           >
@@ -372,7 +366,7 @@ function nodeKey<TTab extends string>(node: TabWindowsLayout<TTab>) {
 
 function dropIndicatorClass(edge: TabWindowsDropEdge) {
   return cn(
-    "pointer-events-none absolute z-20 rounded-md border-2 border-primary/70 bg-primary/15 shadow-sm",
+    "pointer-events-none absolute z-20 border-2 border-primary/50 bg-primary/10",
     edge === "center" && "inset-2",
     edge === "left" && "inset-y-2 left-2 w-[calc(50%-0.5rem)]",
     edge === "right" && "inset-y-2 right-2 w-[calc(50%-0.5rem)]",

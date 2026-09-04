@@ -35,9 +35,8 @@ export function Example() {
   return (
     <TabWindows
       aria-label="Project workspace"
-      className="h-[560px]"
       defaultLayout={layout}
-      renderPanel={(tab) => <div className="p-6">{tab}</div>}
+      renderPanel={(tab) => tab}
     />
   );
 }
